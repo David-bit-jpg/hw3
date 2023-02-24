@@ -16,6 +16,7 @@ using namespace std;
  */
 Node* readList(const char* filename);
 
+
 /**
  * Prints the integers in a linked list pointed to
  * by head.
@@ -26,7 +27,11 @@ void print(Node* head);
  * Deallocates the linked list nodes
  */
 void dealloc(Node* head);
-
+bool compare(int n)
+{
+    if(n%2!=0) return true;
+    else return false;
+}
 
 Node* readList(const char* filename)
 {
@@ -77,19 +82,33 @@ int main(int argc, char* argv[])
         cout << "Please provide an input file" << endl;
         return 1;
     }
-
     // -----------------------------------------------
     // Feel free to update any code below this point
     // -----------------------------------------------
     Node* head = readList(argv[1]);
     cout << "Original list: ";
     print(head);
-
+    Node* smaller = NULL;
+    Node* larger = NULL;
     // Test out your linked list code
-
-
-
-    
+    int pivot = 10;
+    llpivot(head,smaller, larger, pivot);
+    cout<<"Pivot "<<pivot<<" List:"<<endl;
+    cout<<"Smaller List"<<endl;
+    print(smaller);
+    cout<<"Larger List"<<endl;
+    print(larger);
+    dealloc(smaller);
+    dealloc(larger);
+    head = readList(argv[1]);
+    cout<<endl;
+    cout<<"List ";
+    print(head);
+    cout<<head->val<<" "<<head->next->val<<endl;
+    head = llfilter(head, compare);
+    cout<<"Filtered List:"<<endl;
+    cout<<head->val<<" "<<head->next->val<<endl;
+    print(head);
+    dealloc(head);
     return 0;
-
 }
