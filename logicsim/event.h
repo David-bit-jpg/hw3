@@ -10,7 +10,7 @@ struct Event
 };
 
 typedef struct EventLess {
-    bool operator()(Event* event1, Event* event2) const
+    bool operator()(const Event* event1, const Event* event2) const
     {
         return event1->time < event2->time;
     }

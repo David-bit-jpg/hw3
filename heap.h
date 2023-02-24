@@ -52,7 +52,7 @@ public:
    * @brief Returns true if the heap is empty
    * 
    */
-  bool empty() const;git status
+  bool empty() const;
 
     /**
    * @brief Returns size of the heap
@@ -84,15 +84,13 @@ void Heap<T,PComparator>::push(const T& item)
 {
   data.push_back(item);
   std::size_t index = data.size() - 1;
-  while (index != 0) {
+  while (index > 0) {
       std::size_t parent_index = (index - 1) / m_;
-      T& current = data[index];
-      T& parent = data[parent_index];
-      if (c_(parent,current)) {
-          break;
+      if (c_(data[index],data[parent_index])) {
+        std::swap(data[index],data[parent_index]);
+        index = parent_index;
       }
-      std::swap(current, parent);
-      index = parent_index;
+      else break;
   }
 }
 template <typename T, typename PComparator>
@@ -134,28 +132,31 @@ void Heap<T,PComparator>::pop()
     // ================================
     throw std::underflow_error("heap is empty");
   }
-  data[0] = data.back();
+  swap(data[0], data[data.size() - 1]);
   data.pop_back();
-  size_t index = 0;
-  while(index != data.size()-1)
+  size_t Pindex = 0;
+  while(true)
   {
-    size_t child_ind = m_*index +1;
-    if(child_ind>=data.size()) break;
-    size_t max_child = child_ind;
-    for(size_t i=0;i<size_t(m_);i++)
-    {
-      if(i+child_ind<=data.size())
-      {
-        if(c_(data[i+child_ind],data[max_child]))
-        max_child = i+max_child;
-      }
-    }
-    if((c_(data[index],data[max_child])))
+    size_t maxchild = m_*Pindex +1;
+    if (maxchild >= data.size()) 
     {
       break;
     }
-    swap(data[index],data[max_child]);
-    index = max_child;
+    for(size_t i=1;i<=(size_t)m_;i++)
+    {
+      size_t childIndex = m_*Pindex+i;
+      if(childIndex>=data.size()) break;
+      if(c_(data[childIndex],data[maxchild]))
+      {
+        maxchild = childIndex;
+      }
+    }
+    if(c_(data[maxchild],data[Pindex]))
+    {
+      swap(data[Pindex],data[maxchild]);
+      Pindex = maxchild;
+    }
+    else break;
   }
 }
 
